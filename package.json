@@ -1,0 +1,16 @@
+{
+  "name": "openclaw-bot-config",
+  "version": "1.0.0",
+  "description": "OpenClaw Bot Configuration Dashboard",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "express": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7"
+  }
+}

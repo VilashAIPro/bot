@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenClaw — Configuration Dashboard</title>
+  <meta name="description" content="Configure your OpenClaw personal AI assistant — API keys, channels, security, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- ─── Top Nav ──────────────────────────────────────── -->
+  <header class="topbar" id="topbar">
+    <div class="topbar-left">
+      <span class="logo">🦞</span>
+      <h1 class="topbar-title">OpenClaw</h1>
+      <span class="topbar-badge">Config</span>
+    </div>
+    <div class="topbar-right">
+      <div class="status-dot" id="statusDot" title="Server status"></div>
+      <button class="btn btn-ghost" id="btnReset" title="Reset to defaults">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Reset
+      </button>
+      <button class="btn btn-primary" id="btnSave">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Config
+      </button>
+    </div>
+  </header>
+
+  <!-- ─── Toast ────────────────────────────────────────── -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ─── Main Layout ──────────────────────────────────── -->
+  <div class="layout">
+    <!-- Sidebar Nav -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+        <a href="#agent" class="nav-link active" data-section="agent">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          AI Agent
+        </a>
+        <a href="#apikeys" class="nav-link" data-section="apikeys">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          API Keys
+        </a>
+        <a href="#whatsapp" class="nav-link" data-section="whatsapp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          WhatsApp
+        </a>
+        <a href="#telegram" class="nav-link" data-section="telegram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Telegram
+        </a>
+        <a href="#discord" class="nav-link" data-section="discord">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="M7.5 7.5c3.5-1 5.5-1 9 0"/><path d="M7 16.5c3.5 1 6.5 1 10 0"/><path d="M15.5 17c0 1 1.5 3 2 3 1.5 0 2.833-1.667 3.5-3 .667-1.667.5-5.833-1.5-11.5-1.457-1.015-3-1.34-4.5-1.5l-1 2.5"/><path d="M8.5 17c0 1-1.356 3-1.832 3-1.429 0-2.698-1.667-3.333-3-.635-1.667-.476-5.833 1.428-11.5C6.151 4.485 7.545 4.16 9 4l1 2.5"/></svg>
+          Discord
+        </a>
+        <a href="#slack" class="nav-link" data-section="slack">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="13" y="2" width="3" height="8" rx="1.5"/><path d="M19 8.5V10h1.5A1.5 1.5 0 1 0 19 8.5"/><rect x="8" y="14" width="3" height="8" rx="1.5"/><path d="M5 15.5V14H3.5A1.5 1.5 0 1 0 5 15.5"/><rect x="14" y="13" width="8" height="3" rx="1.5"/><path d="M15.5 19H14v1.5a1.5 1.5 0 1 0 1.5-1.5"/><rect x="2" y="8" width="8" height="3" rx="1.5"/><path d="M8.5 5H10V3.5A1.5 1.5 0 1 0 8.5 5"/></svg>
+          Slack
+        </a>
+        <a href="#gateway" class="nav-link" data-section="gateway">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          Gateway
+        </a>
+        <a href="#security" class="nav-link" data-section="security">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Security
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main" id="mainContent">
+
+      <!-- ─── Agent Section ─────────────────────────────── -->
+      <section class="card" id="section-agent">
+        <div class="card-header">
+          <h2 class="card-title">🤖 AI Agent Configuration</h2>
+          <p class="card-desc">Choose your AI model and default behavior</p>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="agentModel">Model</label>
+            <select id="agentModel" class="input">
+              <option value="">Select a model...</option>
+              <optgroup label="Anthropic">
+                <option value="anthropic/claude-opus-4-6">Claude Opus 4.6</option>
+                <option value="anthropic/claude-sonnet-4-5">Claude Sonnet 4.5</option>
+                <option value="anthropic/claude-haiku-3-5">Claude Haiku 3.5</option>
+              </optgroup>
+              <optgroup label="OpenAI">
+                <option value="openai/gpt-5.2">GPT-5.2</option>
+                <option value="openai/gpt-4.1-turbo">GPT-4.1 Turbo</option>
+                <option value="openai/o3">o3</option>
+                <option value="openai/o4-mini">o4-mini</option>
+              </optgroup>
+              <optgroup label="Google">
+                <option value="google/gemini-2.5-pro">Gemini 2.5 Pro</option>
+                <option value="google/gemini-2.5-flash">Gemini 2.5 Flash</option>
+              </optgroup>
+              <optgroup label="Other">
+                <option value="groq/llama-4-scout">Llama 4 Scout (Groq)</option>
+                <option value="openrouter/auto">OpenRouter Auto</option>
+              </optgroup>
+            </select>
+            <span class="hint">The primary LLM model your assistant uses</span>
+          </div>
+          <div class="form-group">
+            <label for="thinkingLevel">Thinking Level</label>
+            <select id="thinkingLevel" class="input">
+              <option value="off">Off</option>
+              <option value="minimal">Minimal</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="xhigh">Extra High</option>
+            </select>
+            <span class="hint">Controls how much the model "thinks" before responding</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── API Keys Section ──────────────────────────── -->
+      <section class="card" id="section-apikeys">
+        <div class="card-header">
+          <h2 class="card-title">🔑 API Keys</h2>
+          <p class="card-desc">Enter your AI provider API keys</p>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="keyOpenai">OpenAI API Key</label>
+            <div class="input-group">
+              <input type="password" id="keyOpenai" class="input mono" placeholder="sk-..." autocomplete="off" />
+              <button class="btn-icon toggle-vis" data-target="keyOpenai" title="Toggle visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="keyAnthropic">Anthropic API Key</label>
+            <div class="input-group">
+              <input type="password" id="keyAnthropic" class="input mono" placeholder="sk-ant-..." autocomplete="off" />
+              <button class="btn-icon toggle-vis" data-target="keyAnthropic" title="Toggle visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="keyGoogle">Google AI API Key</label>
+            <div class="input-group">
+              <input type="password" id="keyGoogle" class="input mono" placeholder="AIza..." autocomplete="off" />
+              <button class="btn-icon toggle-vis" data-target="keyGoogle" title="Toggle visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="keyGroq">Groq API Key</label>
+            <div class="input-group">
+              <input type="password" id="keyGroq" class="input mono" placeholder="gsk_..." autocomplete="off" />
+              <button class="btn-icon toggle-vis" data-target="keyGroq" title="Toggle visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="keyOpenrouter">OpenRouter API Key</label>
+            <div class="input-group">
+              <input type="password" id="keyOpenrouter" class="input mono" placeholder="sk-or-..." autocomplete="off" />
+              <button class="btn-icon toggle-vis" data-target="keyOpenrouter" title="Toggle visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── WhatsApp Section ──────────────────────────── -->
+      <section class="card" id="section-whatsapp">
+        <div class="card-header">
+          <div class="card-header-row">
+            <div>
+              <h2 class="card-title">💬 WhatsApp</h2>
+              <p class="card-desc">Connect your WhatsApp account</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="waEnabled" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="waPhone">Phone Number</label>
+            <input type="text" id="waPhone" class="input" placeholder="+1234567890" />
+            <span class="hint">Your WhatsApp phone number with country code</span>
+          </div>
+          <div class="form-group">
+            <label for="waAllowFrom">Allowed Contacts</label>
+            <input type="text" id="waAllowFrom" class="input" placeholder="+1234567890, +0987654321" />
+            <span class="hint">Comma-separated phone numbers. Use * to allow all.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Telegram Section ──────────────────────────── -->
+      <section class="card" id="section-telegram">
+        <div class="card-header">
+          <div class="card-header-row">
+            <div>
+              <h2 class="card-title">✈️ Telegram</h2>
+              <p class="card-desc">Connect a Telegram bot</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="tgEnabled" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="tgBotToken">Bot Token</label>
+            <div class="input-group">
+              <input type="password" id="tgBotToken" class="input mono" placeholder="123456:ABCDEF..." autocomplete="off" />
+              <button class="btn-icon toggle-vis" data-target="tgBotToken" title="Toggle visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span class="hint">Get this from <a href="https://t.me/BotFather" target="_blank" rel="noopener">@BotFather</a></span>
+          </div>
+          <div class="form-group">
+            <label for="tgAllowFrom">Allowed Users</label>
+            <input type="text" id="tgAllowFrom" class="input" placeholder="username1, username2" />
+            <span class="hint">Comma-separated Telegram usernames</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Discord Section ──────────────────────────── -->
+      <section class="card" id="section-discord">
+        <div class="card-header">
+          <div class="card-header-row">
+            <div>
+              <h2 class="card-title">🎮 Discord</h2>
+              <p class="card-desc">Connect a Discord bot</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="dcEnabled" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="dcToken">Bot Token</label>
+            <div class="input-group">
+              <input type="password" id="dcToken" class="input mono" placeholder="MTk..." autocomplete="off" />
+              <button class="btn-icon toggle-vis" data-target="dcToken" title="Toggle visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span class="hint">From Discord Developer Portal → Bot → Token</span>
+          </div>
+          <div class="form-group">
+            <label for="dcAllowFrom">Allowed Users</label>
+            <input type="text" id="dcAllowFrom" class="input" placeholder="user_id_1, user_id_2" />
+            <span class="hint">Comma-separated Discord user IDs</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Slack Section ─────────────────────────────── -->
+      <section class="card" id="section-slack">
+        <div class="card-header">
+          <div class="card-header-row">
+            <div>
+              <h2 class="card-title">📋 Slack</h2>
+              <p class="card-desc">Connect a Slack bot</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="slEnabled" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="slBotToken">Bot Token</label>
+            <div class="input-group">
+              <input type="password" id="slBotToken" class="input mono" placeholder="xoxb-..." autocomplete="off" />
+              <button class="btn-icon toggle-vis" data-target="slBotToken" title="Toggle visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="slAppToken">App Token</label>
+            <div class="input-group">
+              <input type="password" id="slAppToken" class="input mono" placeholder="xapp-..." autocomplete="off" />
+              <button class="btn-icon toggle-vis" data-target="slAppToken" title="Toggle visibility">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Gateway Section ──────────────────────────── -->
+      <section class="card" id="section-gateway">
+        <div class="card-header">
+          <h2 class="card-title">🖥️ Gateway</h2>
+          <p class="card-desc">Configure the gateway control plane</p>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="gwPort">Port</label>
+              <input type="number" id="gwPort" class="input" placeholder="18789" />
+            </div>
+            <div class="form-group">
+              <label for="gwBind">Bind</label>
+              <select id="gwBind" class="input">
+                <option value="loopback">Loopback (127.0.0.1)</option>
+                <option value="all">All interfaces (0.0.0.0)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="gwAuthMode">Auth Mode</label>
+              <select id="gwAuthMode" class="input">
+                <option value="none">None</option>
+                <option value="password">Password</option>
+                <option value="token">Token</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="gwPassword">Auth Password</label>
+              <div class="input-group">
+                <input type="password" id="gwPassword" class="input mono" placeholder="Enter password..." autocomplete="off" />
+                <button class="btn-icon toggle-vis" data-target="gwPassword" title="Toggle visibility">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="browserEnabled" />
+              <span>Enable Browser Control</span>
+            </label>
+            <span class="hint">Allows the AI to control a browser via CDP</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Security Section ──────────────────────────── -->
+      <section class="card" id="section-security">
+        <div class="card-header">
+          <h2 class="card-title">🛡️ Security</h2>
+          <p class="card-desc">Protect your assistant from unauthorized access</p>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="secDmPolicy">DM Policy</label>
+            <select id="secDmPolicy" class="input">
+              <option value="pairing">Pairing (recommended)</option>
+              <option value="open">Open</option>
+              <option value="deny">Deny all</option>
+            </select>
+            <span class="hint">Controls how unknown senders are handled</span>
+          </div>
+          <div class="form-group">
+            <label for="secSandbox">Sandbox Mode</label>
+            <select id="secSandbox" class="input">
+              <option value="off">Off</option>
+              <option value="non-main">Non-main sessions (Docker)</option>
+              <option value="all">All sessions (Docker)</option>
+            </select>
+            <span class="hint">Run untrusted sessions inside Docker containers</span>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="secElevated" />
+              <span>Allow Elevated Bash</span>
+            </label>
+            <span class="hint">⚠️ Gives the AI host-level shell access</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
